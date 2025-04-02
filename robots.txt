@@ -1,0 +1,5 @@
+User-agent: *
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Sitemap: https://nickvui.com/sitemap/sitemap.xml

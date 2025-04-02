@@ -1,0 +1,41 @@
+
+ul.nav.navbar-nav.navbar-right a:hover {
+  color:#fffccc !important;
+  text-decoration:none;
+}
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+  background-color:#f0ad4e;
+}
+
+input[type=number] {
+  width:100%;
+  border:1px solid #1abb9c;
+  height:34px;
+  padding:6px 12px;
+  border-radius:0;
+}
+button.btn.btn-success {
+  border-radius:0;
+  width:100%;
+  text-align:center;
+}
+.panel-group {
+  box-shadow:1px 1px 4px 0 #999;
+  border-radius:8px;
+  margin-bottom:0;
+}
+.col-md-4.page_frm {
+  padding:20px 15px;
+  position:relative;
+}
+
+.col-md-8.page_frm {
+  padding:20px 15px;
+  position:relative;
+}
+.mainDIV {
+  width:100%;
+  height:100%;
+  position:relative;
+}

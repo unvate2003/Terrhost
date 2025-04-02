@@ -1,0 +1,266 @@
+<IfModule LiteSpeed>
+    CacheEnable public
+</IfModule>
+
+##<IfModule Litespeed>
+##    CacheLookup on
+##</IfModule>
+
+
+# BEGIN DEFLATE COMPRESSION
+<IfModule mod_deflate.c>
+# Compress HTML, CSS, JavaScript, Text, XML and fonts
+ AddOutputFilterByType DEFLATE application/javascript
+ AddOutputFilterByType DEFLATE application/rss+xml
+ AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+ AddOutputFilterByType DEFLATE application/x-font
+ AddOutputFilterByType DEFLATE application/x-font-opentype
+ AddOutputFilterByType DEFLATE application/x-font-otf
+ AddOutputFilterByType DEFLATE application/x-font-truetype
+ AddOutputFilterByType DEFLATE application/x-font-ttf
+ AddOutputFilterByType DEFLATE application/x-javascript
+ AddOutputFilterByType DEFLATE application/xhtml+xml
+ AddOutputFilterByType DEFLATE application/xml
+ AddOutputFilterByType DEFLATE font/opentype
+ AddOutputFilterByType DEFLATE font/otf
+ AddOutputFilterByType DEFLATE font/ttf
+ AddOutputFilterByType DEFLATE image/svg+xml
+ AddOutputFilterByType DEFLATE image/x-icon
+ AddOutputFilterByType DEFLATE text/css
+ AddOutputFilterByType DEFLATE text/html
+ AddOutputFilterByType DEFLATE text/javascript
+ AddOutputFilterByType DEFLATE text/plain
+ AddOutputFilterByType DEFLATE text/xml
+</IfModule>
+# END DEFLATE COMPRESSION
+
+# BEGIN GZIP COMPRESSION
+<IfModule mod_gzip.c>
+mod_gzip_on Yes
+mod_gzip_dechunk Yes
+mod_gzip_item_include file \.(html?|txt|css|js|php|pl)$
+mod_gzip_item_include handler ^cgi-script$
+mod_gzip_item_include mime ^text/.*
+mod_gzip_item_include mime ^application/x-javascript.*
+mod_gzip_item_exclude mime ^image/.*
+mod_gzip_item_exclude rspheader ^Content-Encoding:.*gzip.*
+</IfModule>
+# END GZIP COMPRESSION
+
+#BEGIN EXPIRES HEADERS
+<IfModule mod_expires.c>
+# Enable expirations
+ExpiresActive On
+# Default expiration: 1 hour after request
+ExpiresDefault "now plus 1 hour"
+# CSS and JS expiration: 1 week after request
+ExpiresByType text/css "now plus 1 week"
+ExpiresByType application/javascript "now plus 1 week"
+ExpiresByType application/x-javascript "now plus 1 week"
+# Image files expiration: 1 month after request
+ExpiresByType image/bmp "now plus 1 month"
+ExpiresByType image/gif "now plus 1 month"
+ExpiresByType image/jpeg "now plus 1 month"
+ExpiresByType image/jp2 "now plus 1 month"
+ExpiresByType image/pipeg "now plus 1 month"
+ExpiresByType image/png "now plus 1 month"
+ExpiresByType image/svg+xml "now plus 1 month"
+ExpiresByType image/tiff "now plus 1 month"
+ExpiresByType image/vnd.microsoft.icon "now plus 1 month"
+ExpiresByType image/x-icon "now plus 1 month"
+ExpiresByType image/ico "now plus 1 month"
+ExpiresByType image/icon "now plus 1 month"
+ExpiresByType text/ico "now plus 1 month"
+ExpiresByType application/ico "now plus 1 month"
+# Webfonts
+ExpiresByType font/truetype "access plus 1 month"
+ExpiresByType font/opentype "access plus 1 month"
+ExpiresByType application/x-font-woff "access plus 1 month"
+ExpiresByType image/svg+xml "access plus 1 month"
+ExpiresByType application/vnd.ms-fontobject "access plus 1 month"
+</IfModule>
+#END EXPIRES HEADERS
+
+# BEGIN Cache-Control Headers
+<ifModule mod_headers.c>
+ <filesMatch "\.(ico|jpe?g|png|gif|swf)$">
+ Header set Cache-Control "public"
+ </filesMatch>
+ <filesMatch "\.(css)$">
+ Header set Cache-Control "public"
+ </filesMatch>
+ <filesMatch "\.(js)$">
+ Header set Cache-Control "private"
+ </filesMatch>
+ <filesMatch "\.(x?html?|php)$">
+ Header set Cache-Control "private, must-revalidate"
+ </filesMatch>
+</ifModule>
+# END Cache-Control Headers
+
+# BEGIN Cache-Control Headers
+<ifModule mod_headers.c>
+ <filesMatch "\.(ico|jpe?g|png|gif|swf)$">
+ Header set Cache-Control "max-age=2592000, public"
+ </filesMatch>
+ <filesMatch "\.(css)$">
+ Header set Cache-Control "max-age=604800, public"
+ </filesMatch>
+ <filesMatch "\.(js)$">
+ Header set Cache-Control "max-age=216000, private"
+ </filesMatch>
+ <filesMatch "\.(x?html?|php)$">
+ Header set Cache-Control "max-age=600, private, must-revalidate"
+ </filesMatch>
+</ifModule>
+# END Cache-Control Headers
+
+Options -Indexes
+
+#Options -Indexes
+ErrorDocument 404 /pages/404.php
+ErrorDocument 402 /pages/404.php
+ErrorDocument 403 /pages/404.php
+ErrorDocument 404 /pages/404.php
+ErrorDocument 500 /pages/404.php
+DirectoryIndex index.php
+
+
+#HTTPS
+RewriteEngine On
+RewriteCond %{HTTPS} !=on [NC]
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+##RewriteCond %{HTTP_HOST} ^www.nickvui.com [NC]
+##RewriteRule ^(.*)$ https://nickvui.com/$1 [L,R=301]
+
+
+## Enble Auto Add .www
+##RewriteEngine On
+##RewriteCond %{HTTP_HOST} ^[^.]+\.[^.]+$
+##RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [L,R=301]
+
+## Disable Auto Remove .www
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [L,R=301]
+
+
+RewriteRule ^index.html$ index.php [L]
+RewriteRule ^$ /pages/dashbroad.php [L]
+##RewriteRule ^home$ /pages/dashbroad.php [L]
+
+RewriteRule ^Robots.txt$ robots.txt [L]
+RewriteRule ^bao-tri$ /pages/baotri.php [L]
+RewriteRule ^login$ /template/login.php [L]
+RewriteRule ^signup$ /template/register.php [L]
+RewriteRule ^logout$ /pages/logout.php [L]
+RewriteRule ^profile$ /pages/profile.php [L]
+RewriteRule ^lich-su-mua$ /pages/history-buy.php [L]
+RewriteRule ^lich-su-mua.html$ /pages/lich-su-mua.php [L]
+RewriteRule ^baotri$ /pages/baotri.php [L]
+RewriteRule ^bank$ /pages/bank.php [L]
+RewriteRule ^historylog$ /pages/history-log.php [L]
+RewriteRule ^ticket$ /pages/ticket.php [L]
+RewriteRule ^nap-tien$ /pages/nap-tien.php [L]
+RewriteRule ^nap-tien.html$ /pages/nap-tien.php [L]
+RewriteRule ^nap-the-cao$ /pages/napthe.php [L]
+RewriteRule ^nap-the$ /pages/payment.php [L]
+RewriteRule ^khieu-nai-nap-tien$ /pages/khieunainaptien.php [L]
+RewriteRule ^product-pay$ /admin/setting-pay.php [L]
+RewriteRule ^resetpassword$ /template/resetpass.php [L]
+
+
+RewriteRule ^resetnewpass\.php$ /template/resetnewpass.php [QSA,L]
+##RewriteRule ^resetnewpass.php?key=([a-zA-Z0-9]+)&email=([a-zA-Z0-9_-.@]+)&action=([a-zA-Z0-9]+)$ /template/resetnewpass.php?key=$1&email=$2&action=$3 [QSA,L]
+
+
+RewriteRule ^Secure/Captcha/CaptchaImage.png$ /auth/captcha/captcha.php [QSA,L]
+
+
+
+RewriteRule ^history-pay$ /admin/history-pay.php [L]
+RewriteRule ^history-login$ /admin/history-login.php [L]
+RewriteRule ^setup-system$ /admin/setting-system.php [L]
+RewriteRule ^setup-payment$ /admin/setting-payment.php [L]
+RewriteRule ^setup-product$ /admin/setting-product.php [L]
+RewriteRule ^add-product$ /admin/add-product.php [L]
+RewriteRule ^add-categories$ /admin/setting-addcate.php [L]
+RewriteRule ^add-sub-cate$ /admin/setting-addsubcate.php [L]
+RewriteRule ^setup-money$ /admin/setting-count.php [L]
+RewriteRule ^setup-member$ /admin/setting-member.php [L]
+RewriteRule ^setup-ticket$ /admin/setting-ticket.php [L]
+RewriteRule ^setup-mbbank$ /admin/setting-mbbank.php [L]
+RewriteRule ^setup-tpbank$ /admin/setting-tpbank.php [L]
+RewriteRule ^setup-momo$ /admin/setting-momo.php [L]
+RewriteRule ^setup-napthe$ /admin/setting-napthe.php [L]
+
+RewriteRule ^thanhtoan/([a-zA-Z0-9_-]+)\-([a-zA-Z0-9_-]+)$ pages/thanhtoan.php?key_id=$2 [QSA,L]
+
+
+RewriteRule ^Query/Login.html$ /auth/login/login.php [L]
+RewriteRule ^Query/Signup.html$ /auth/signup/signup.php [L]
+RewriteRule ^Query/Check.html$ /auth/check/check-user.php [L]
+RewriteRule ^Query/CheckSub.html$ /auth/check/get-sub-cate.php [L]
+RewriteRule ^Query/Cate-Hide.html$ /auth/check/update-sub-cate.php [L]
+RewriteRule ^Query/Cate-Show.html$ /auth/check/update-sub-cate-hide.php [L]
+RewriteRule ^Query/Product-Hide.html$ /auth/check/update-product-hide.php [L]
+RewriteRule ^Query/Product-Show.html$ /auth/check/update-product.php [L]
+RewriteRule ^Query/Add-Product.html$ /auth/check/add-product-admin.php [L]
+RewriteRule ^Query/Delete-Product.html$ /auth/check/delete-product-admin.php [L]
+RewriteRule ^Query/Get-Product.html$ /auth/check/admin-ajax.php [L]
+RewriteRule ^Query/Get-Product-Pay.html$ /auth/check/admin-ajax-pay.php [L]
+RewriteRule ^Query/Ticket.html$ /auth/ticket/ticket.php [L]
+RewriteRule ^Query/Order.html$ /auth/thanhtoan/thanhtoan.php [L]
+RewriteRule ^Query/History-Buy.html$ /auth/thanhtoan/history-buy-ajax.php [L]
+RewriteRule ^Query/ChangePassWord.html$ /auth/password/password.php [L]
+RewriteRule ^Query/ApiMomo.html$ /auth/@apimomo/login.php [L]
+RewriteRule ^Query/ApiMbbank.html$ /auth/@apimbbank/balance.php [L]
+RewriteRule ^Query/NapThe.html$ /auth/napthe/napthe.php [L]
+RewriteRule ^Query/LichSu.html$ /auth/napthe/lichsunap.php [L]
+RewriteRule ^Query/ApiTPbank.html$ /auth/@apitpbank/balance.php [L]
+RewriteRule ^Query/ApiLoginTPbank.html$ /auth/@apitpbank/login.php [L]
+
+RewriteRule ^api/momo/cron$ /auth/@apimomo/cron.php [L]
+RewriteRule ^api/bank/cron$ /auth/@apimbbank/cron.php [L]
+RewriteRule ^api/tpbank/cron/(.*)$ /auth/@apitpbank/cj.php?name=$1 [L]
+RewriteRule ^api/tpbank/cron2/(.*)$ /auth/@apitpbank/cj-backup.php?name=$1 [L]
+RewriteRule ^sitemap/sitemap.xml/?$ sitemap/sitemap.php
+RewriteRule ^sitemap/sitemap_product.xml/?$ sitemap/sitemap_product.php
+
+##ErrorDocument 404 /pages/404.php
+
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# This domain inherits the “PHP” package.
+# php -- END cPanel-generated handler, do not edit
+
+# BEGIN cPanel-generated php ini directives, do not edit
+# Manual editing of this file may result in unexpected behavior.
+# To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
+# For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
+<IfModule php7_module>
+   php_flag display_errors Off
+   php_value max_execution_time 3600
+   php_value max_input_time 60
+   php_value max_input_vars 1000
+   php_value memory_limit 2G
+   php_value post_max_size 512M
+   php_value session.gc_maxlifetime 1440
+   php_value session.save_path "/opt/alt/php74/var/lib/php/session"
+   php_value upload_max_filesize 2G
+   php_flag zlib.output_compression Off
+</IfModule>
+<IfModule lsapi_module>
+   php_flag display_errors Off
+   php_value max_execution_time 3600
+   php_value max_input_time 60
+   php_value max_input_vars 1000
+   php_value memory_limit 2G
+   php_value post_max_size 512M
+   php_value session.gc_maxlifetime 1440
+   php_value session.save_path "/opt/alt/php74/var/lib/php/session"
+   php_value upload_max_filesize 2G
+   php_flag zlib.output_compression Off
+</IfModule>
+# END cPanel-generated php ini directives, do not edit
